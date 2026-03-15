@@ -2,13 +2,23 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spencerhum/duckmq/db"
+	"github.com/spencerhum/duckmq/queue"
 )
 
 func main() {
 	database := db.Connect()
 	defer database.Close()
 
-	fmt.Println("DuckMQ is running")
+	job, err := queue.Enqueue(database, "send email", map[string]any{
+		"to":      "test@example.com",
+		"subject": "test message from DuckMQ",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Enqueued job id=%d type=%s:", job.ID, job.Type)
 }
