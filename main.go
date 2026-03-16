@@ -20,5 +20,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Enqueued job id=%d type=%s:", job.ID, job.Type)
+	fmt.Printf("Enqueued job id=%d type=%s:", job.ID, job.Type)
 }
