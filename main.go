@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/spencerhum/duckmq/db"
 	"github.com/spencerhum/duckmq/queue"
 )
