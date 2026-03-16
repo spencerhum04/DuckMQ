@@ -15,12 +15,12 @@ type Job struct {
 }
 
 func Start(db *sql.DB) {
-	fmt.Println("worker started, polling for jobs...")
+	fmt.Println("Worker started, polling for jobs...")
 
 	for {
 		job, err := dequeue(db)
 		if err != nil {
-			log.Println("error dequeuing:", err)
+			log.Println("Error dequeuing:", err)
 			time.Sleep(2 * time.Second)
 			continue
 		}
@@ -30,7 +30,7 @@ func Start(db *sql.DB) {
 			continue
 		}
 
-		fmt.Printf("picked up job id=%d type=%s\n", job.ID, job.Type)
+		fmt.Printf("Picked up job id=%d type=%s\n", job.ID, job.Type)
 		processJob(db, job)
 	}
 }
@@ -58,18 +58,18 @@ func dequeue(db *sql.DB) (*Job, error) {
 		return nil, nil
 	}
 	if err != nil {
-		return nil, fmt.Errorf("dequeue failed: %w", err)
+		return nil, fmt.Errorf("Dequeue failed: %w", err)
 	}
 
 	if err := json.Unmarshal(rawPayload, &job.Payload); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal payload: %w", err)
+		return nil, fmt.Errorf("Failed to unmarshal payload: %w", err)
 	}
 
 	return &job, nil
 }
 
 func processJob(db *sql.DB, job *Job) {
-	fmt.Printf("processing job id=%d payload=%v\n", job.ID, job.Payload)
+	fmt.Printf("Processing job id=%d payload=%v\n", job.ID, job.Payload)
 	time.Sleep(500 * time.Millisecond)
 
 	_, err := db.Exec(`
@@ -79,7 +79,7 @@ func processJob(db *sql.DB, job *Job) {
 	`, job.ID)
 
 	if err != nil {
-		log.Printf("failed to mark job %d done: %v\n", job.ID, err)
+		log.Printf("Failed to mark job %d done: %v\n", job.ID, err)
 		return
 	}
 
